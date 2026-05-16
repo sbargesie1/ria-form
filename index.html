@@ -457,7 +457,7 @@
     .limit-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@1/web/file-uploader.min.js" type="module"></script>
+<script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -1129,17 +1129,17 @@
   <div class="field-group">
     <label>Upload Files <span class="opt">optional — PDFs, Word docs, Excel files accepted</span></label>
     <div style="margin-top:10px;">
-      <uc-config
-        ctx-name="ria-docs"
-        pubkey="ad3919781d85849912db"
-        multiple="true"
-        accept=".pdf,.doc,.docx,.xls,.xlsx"
-        max-files="20"
-      ></uc-config>
-      <uc-file-uploader-regular
-        ctx-name="ria-docs"
-        style="--uc-primary-color:#111111; --uc-border-radius:6px;"
-      ></uc-file-uploader-regular>
+      <input type="hidden" role="uploadcare-uploader" 
+        name="uploaded_files"
+        data-public-key="ad3919781d85849912db"
+        data-multiple="true"
+        data-multiple-max="20"
+        data-images-only="false"
+        data-preview-step="true"
+      />
+      <style>
+        .uploadcare--widget__button { background: #111111 !important; color: white !important; border-radius: 6px !important; font-family: 'DM Sans', sans-serif !important; }
+      </style>
     </div>
     <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">Files are encrypted with AES-256 and stored securely. Maximum 20 files, 500MB each.</p>
   </div>
