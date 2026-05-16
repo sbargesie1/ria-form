@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIA E&O Insurance Application — Upward Risk Management</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f3c;
+    --navy-mid: #1a3360;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --gray-100: #f5f4f1;
+    --gray-200: #e8e6e1;
+    --gray-400: #9e9b95;
+    --gray-600: #5c5a56;
+    --gray-800: #2c2b29;
+    --red: #c0392b;
+    --green: #1a7a4a;
+    --radius: 10px;
+    --shadow: 0 4px 24px rgba(13,31,60,0.10);
+    --shadow-lg: 0 12px 48px rgba(13,31,60,0.16);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--gray-800);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .form-header {
+    background: var(--navy);
+    color: white;
+    padding: 36px 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .form-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.12);
+  }
+  .form-header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 20%;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.07);
+  }
+  .header-inner { position: relative; z-index: 1; }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .form-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .form-header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    max-width: 540px;
+  }
+
+  /* ── Progress Bar ────────────────────────────────── */
+  .progress-wrap {
+    background: var(--navy-mid);
+    padding: 0 40px;
+  }
+  .progress-steps {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+  }
+  .step-tab {
+    flex: 0 0 auto;
+    padding: 14px 20px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.3px;
+    border-bottom: 3px solid transparent;
+    cursor: default;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .step-tab.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+  .step-tab.done {
+    color: rgba(255,255,255,0.65);
+  }
+  .step-tab .num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 7px;
+  }
+  .step-tab.active .num { background: var(--gold); color: var(--navy); }
+  .step-tab.done .num { background: var(--green); color: white; }
+
+  /* ── Form Body ───────────────────────────────────── */
+  .form-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 36px 40px 60px;
+  }
+
+  .step-panel { display: none; }
+  .step-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  /* ── Field Groups ────────────────────────────────── */
+  .field-group {
+    margin-bottom: 22px;
+  }
+  .field-row {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.cols-1-2 { grid-template-columns: 1fr 2fr; }
+  .field-row.cols-2-1 { grid-template-columns: 2fr 1fr; }
+  .field-row.cols-1-1-1 { grid-template-columns: 2fr 1fr 1fr; }
+
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--navy-mid);
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  label .opt { font-weight: 400; color: var(--gray-400); text-transform: none; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="url"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    color: var(--gray-800);
+    transition: border-color 0.18s, box-shadow 0.18s;
+    outline: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--navy-mid);
+    box-shadow: 0 0 0 3px rgba(26,51,96,0.08);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* ── Yes/No Toggle ───────────────────────────────── */
+  .yn-group { margin-bottom: 18px; }
+  .yn-label {
+    font-size: 14px;
+    color: var(--gray-800);
+    margin-bottom: 8px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .yn-label strong { color: var(--navy); }
+  .yn-buttons { display: flex; gap: 8px; }
+  .yn-btn {
+    padding: 7px 22px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 6px;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--gray-600);
+  }
+  .yn-btn:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .yn-btn.selected-yes { background: var(--navy); border-color: var(--navy); color: white; }
+  .yn-btn.selected-no  { background: var(--gray-100); border-color: var(--gray-400); color: var(--gray-800); }
+  .yn-btn[data-val="no"].selected-no { background: #fff3f3; border-color: #e0a0a0; color: var(--red); }
+
+  /* ── Checkbox Grid ───────────────────────────────── */
+  .cb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .cb-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .cb-item:hover { border-color: var(--navy-mid); background: #f0f3f8; }
+  .cb-item input[type="checkbox"] { display: none; }
+  .cb-item .cb-box {
+    width: 17px; height: 17px;
+    border: 2px solid var(--gray-200);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: white;
+  }
+  .cb-item input:checked ~ .cb-box {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+  .cb-item input:checked ~ .cb-box::after {
+    content: '✓';
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .cb-item input:checked ~ .cb-label { color: var(--navy); font-weight: 500; }
+  .cb-label { font-size: 13px; color: var(--gray-600); }
+
+  /* ── Percent Table ───────────────────────────────── */
+  .pct-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-bottom: 20px; }
+  .pct-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .pct-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: middle;
+  }
+  .pct-table tr:nth-child(even) td { background: var(--gray-100); }
+  .pct-table td:first-child { color: var(--gray-700); }
+  .pct-input {
+    width: 72px;
+    padding: 5px 8px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: right;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pct-input:focus { border-color: var(--navy-mid); outline: none; }
+
+  /* ── AUM Table ───────────────────────────────────── */
+  .aum-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
+  .aum-table th {
+    background: var(--navy-mid);
+    color: white;
+    padding: 9px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  .aum-table td { padding: 8px 10px; border-bottom: 1px solid var(--gray-200); }
+  .aum-table tr:nth-child(even) td { background: var(--gray-100); }
+  .aum-table td:first-child { font-weight: 500; color: var(--navy-mid); font-size: 12.5px; }
+  .aum-table input { width: 100%; }
+
+  /* ── Limit Picker ────────────────────────────────── */
+  .limit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .limit-opt {
+    border: 2px solid var(--gray-200);
+    border-radius: 9px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--gray-600);
+    background: white;
+  }
+  .limit-opt:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .limit-opt.selected { border-color: var(--navy); background: var(--navy); color: white; }
+  .limit-opt input { display: none; }
+
+  /* ── Adviser Table ───────────────────────────────── */
+  .adviser-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 12px; margin-bottom: 10px; }
+
+  /* ── Info Box ────────────────────────────────────── */
+  .info-box {
+    background: #eef3ff;
+    border: 1px solid #b8c9f0;
+    border-radius: 9px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--navy-mid);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .info-box strong { display: block; margin-bottom: 4px; font-size: 13.5px; }
+
+  .warn-box {
+    background: #fff8e8;
+    border: 1px solid #e8c97a;
+    border-radius: 9px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #6b4f00;
+    margin-bottom: 20px;
+  }
+
+  /* ── Nav Buttons ─────────────────────────────────── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--navy-mid); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--gray-600);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-secondary:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .btn-submit {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+  /* ── Success State ───────────────────────────────── */
+  #success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 40px;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+    color: white;
+  }
+  #success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  #success-screen p { color: var(--gray-600); font-size: 15px; max-width: 420px; margin: 0 auto; }
+
+  /* ── Error ───────────────────────────────────────── */
+  .error-msg {
+    background: #fff0f0;
+    border: 1px solid #f0b8b8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--red);
+    font-size: 13.5px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ── Responsive ──────────────────────────────────── */
+  @media (max-width: 600px) {
+    .form-header { padding: 24px 20px 20px; }
+    .form-body { padding: 24px 20px 48px; }
+    .progress-wrap { padding: 0 20px; }
+    .field-row.cols-2,
+    .field-row.cols-3,
+    .field-row.cols-1-2,
+    .field-row.cols-2-1,
+    .field-row.cols-1-1-1 { grid-template-columns: 1fr; }
+    .adviser-row { grid-template-columns: 1fr; }
+    .pct-table { font-size: 12px; }
+    .limit-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<div class="form-header">
+  <div class="header-inner">
+    <div class="header-badge">Markel American Insurance Company</div>
+    <h1>RIA E&O Insurance<br>New Business Application</h1>
+    <p>Financial Services Protection Insurance — complete all sections. Your information is used solely to obtain a quote from Markel.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps" id="progress-steps">
+    <div class="step-tab active" data-step="0"><span class="num">1</span>Firm Info</div>
+    <div class="step-tab" data-step="1"><span class="num">2</span>Prior Coverage</div>
+    <div class="step-tab" data-step="2"><span class="num">3</span>Operations</div>
+    <div class="step-tab" data-step="3"><span class="num">4</span>Conflicts &amp; Disclosures</div>
+    <div class="step-tab" data-step="4"><span class="num">5</span>Assets &amp; Services</div>
+    <div class="step-tab" data-step="5"><span class="num">6</span>Revenue &amp; AUM</div>
+    <div class="step-tab" data-step="6"><span class="num">7</span>Coverage Request</div>
+    <div class="step-tab" data-step="7"><span class="num">8</span>Supplemental</div>
+    <div class="step-tab" data-step="8"><span class="num">9</span>Signature</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ FORM BODY -->
+<div class="form-body">
+<div id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2>Application Submitted!</h2>
+  <p>Your completed Markel application has been sent to your broker at Upward Risk Management. You'll receive a quote within 1–2 business days.</p>
+</div>
+
+<form id="ria-form" novalidate>
+
+<!-- ══════════ STEP 1: Firm Info ══════════ -->
+<div class="step-panel active" id="step-0">
+  <div class="section-title">Firm Information</div>
+  <div class="section-sub">Full legal name of the Registered Investment Adviser or IAR applying for coverage.</div>
+
+  <div class="field-group">
+    <label>Full Legal Name of Applicant (RIA / IAR) <span class="opt">*</span></label>
+    <input type="text" name="applicant_name" placeholder="e.g. Acme Wealth Management LLC" required>
+  </div>
+  <div class="field-group">
+    <label>Additional Business Names (DBAs) <span class="opt">optional</span></label>
+    <input type="text" name="additional_names" placeholder="e.g. Acme Advisors">
+  </div>
+  <div class="field-group">
+    <label>Principal Business Address</label>
+    <input type="text" name="principal_address" placeholder="Street address">
+  </div>
+  <div class="field-row cols-2-1">
+    <div>
+      <label>City</label>
+      <input type="text" name="city">
+    </div>
+    <div>
+      <label>State</label>
+      <input type="text" name="state" maxlength="2" placeholder="CA">
+    </div>
+  </div>
+  <div class="field-row cols-2">
+    <div>
+      <label>Zip Code</label>
+      <input type="text" name="zip">
+    </div>
+    <div>
+      <label>Phone</label>
+      <input type="tel" name="phone" placeholder="(555) 000-0000">
+    </div>
+  </div>
+  <div class="field-row cols-2">
+    <div>
+      <label>Fax <span class="opt">optional</span></label>
+      <input type="tel" name="fax">
+    </div>
+    <div>
+      <label>Website</label>
+      <input type="url" name="website" placeholder="https://yourfirm.com">
+    </div>
+  </div>
+  <div class="field-group">
+    <label>Email Address</label>
+    <input type="email" name="email" placeholder="contact@yourfirm.com" required>
+  </div>
+  <div class="field-row cols-2">
+    <div>
+      <label>Chief Compliance Officer <span class="opt">or leave blank if none</span></label>
+      <input type="text" name="chief_compliance_officer" placeholder="Full name">
+    </div>
+    <div>
+      <label>Outside Compliance Professional <span class="opt">optional</span></label>
+      <input type="text" name="outside_compliance" placeholder="Attorney / consultant name">
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:32px;font-size:17px;">Attachments Checklist</div>
+  <div class="section-sub">Check all items you are submitting with this application.</div>
+  <div class="cb-grid">
+    <label class="cb-item"><input type="checkbox" name="attach_invest_philosophy" value="true"><span class="cb-box"></span><span class="cb-label">Investment philosophy description</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_adv_part1" value="true"><span class="cb-box"></span><span class="cb-label">Form ADV Part 1 &amp; 2A</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_adv_iard" value="true"><span class="cb-box"></span><span class="cb-label">ADV filed electronically (IARD)</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_adv_supplements" value="true"><span class="cb-box"></span><span class="cb-label">ADV Part 2B Supplements (each IAR)</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_supp_iard" value="true"><span class="cb-box"></span><span class="cb-label">Supplements filed via IARD</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_sample_contracts" value="true"><span class="cb-box"></span><span class="cb-label">Sample customer contracts</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_audit_letter" value="true"><span class="cb-box"></span><span class="cb-label">Most recent regulatory audit letter</span></label>
+    <label class="cb-item"><input type="checkbox" name="attach_balance_sheet" value="true"><span class="cb-box"></span><span class="cb-label">Current balance sheet &amp; income statement</span></label>
+  </div>
+  <div class="nav-row"><div></div><button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button></div>
+</div>
+
+<!-- ══════════ STEP 2: Prior Coverage / Claims ══════════ -->
+<div class="step-panel" id="step-1">
+  <div class="section-title">Prior Coverage &amp; Claims History</div>
+  <div class="section-sub">Section A — General Information (Questions 1–4)</div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q1.</strong> Has any insurer declined, cancelled, or non-renewed any Investment Adviser Professional Liability Insurance on behalf of any applicant? <em>(Not applicable in Missouri)</em></div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" data-field="q1" data-val="yes" onclick="setYN(this,'q1_yes','q1_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" data-field="q1" data-val="no"  onclick="setYN(this,'q1_yes','q1_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q1_yes" value="false"><input type="hidden" name="q1_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q2.</strong> Has any Professional Liability (E&O) claim, complaint, or proceeding been made against you or any predecessor organization?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q2_yes','q2_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q2_yes','q2_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q2_yes" value="false"><input type="hidden" name="q2_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q3.</strong> Is any applicant aware of any fact, error, omission, or circumstance that may provide grounds for a claim under the proposed insurance?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q3_yes','q3_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q3_yes','q3_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q3_yes" value="false"><input type="hidden" name="q3_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q4.</strong> Have you or any directors, officers, employees, predecessors, subsidiaries, or affiliates been involved in any pending or completed governmental, regulatory, investigative, or administrative proceedings?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q4_yes','q4_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q4_yes','q4_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q4_yes" value="false"><input type="hidden" name="q4_no" value="false">
+  </div>
+
+  <div class="info-box">
+    <strong>Note</strong>
+    If you answered Yes to any of the above, please attach a separate sheet with details. These answers do not automatically disqualify coverage.
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q5.</strong> Is any advisory customer an investment company, REIT, limited partnership, collective investment trust, or other pooled investment vehicle?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q5_yes','q5_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q5_yes','q5_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q5_yes" value="false"><input type="hidden" name="q5_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q5b.</strong> If No — do you agree to notify Markel within 30 days if you begin rendering advisory services to such a customer?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q5b_yes','q5b_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q5b_yes','q5b_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q5b_yes" value="false"><input type="hidden" name="q5b_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q6.</strong> Do you act as adviser or consultant for any Taft-Hartley, union, or governmental employee benefit plans?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q6_yes','q6_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q6_yes','q6_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q6_yes" value="false"><input type="hidden" name="q6_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q7.</strong> During the last 3 years, have you or any affiliate been involved in any merger, acquisition, divestiture, or significant change in principals?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q7_yes','q7_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q7_yes','q7_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q7_yes" value="false"><input type="hidden" name="q7_no" value="false">
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 3: Operations / Trading ══════════ -->
+<div class="step-panel" id="step-2">
+  <div class="section-title">Operations &amp; Trading</div>
+  <div class="section-sub">Questions 8–12 — trading practices, errors, ERISA, custodians</div>
+
+  <div class="field-row cols-2">
+    <div>
+      <label>Q8. % Revenue from Entertainers / Celebrities / Athletes</label>
+      <input type="number" name="q8_pct" placeholder="0" min="0" max="100">
+    </div>
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q9.</strong> Do you provide personal management services (sports management, bill paying, concierge) to any customer?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q9_yes','q9_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q9_yes','q9_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q9_yes" value="false"><input type="hidden" name="q9_no" value="false">
+  </div>
+
+  <div class="section-title" style="font-size:17px;margin-top:8px;">Q10. Securities Trading</div>
+  <div class="field-row cols-3" style="margin-top:12px;">
+    <div><label>Avg. Daily # of Trades</label><input type="number" name="q10_num_trades" placeholder="0"></div>
+    <div><label>Avg. Daily # of Shares</label><input type="number" name="q10_num_shares" placeholder="0"></div>
+    <div><label>Avg. Daily Dollar Value ($)</label><input type="text" name="q10_dollar_value" placeholder="$0"></div>
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q10b.</strong> Does an automated system track trades from order through execution?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10b_yes','q10b_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10b_yes','q10b_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q10b_yes" value="false"><input type="hidden" name="q10b_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q10c.</strong> Is a trading guidelines manual utilized?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10c_yes','q10c_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10c_yes','q10c_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q10c_yes" value="false"><input type="hidden" name="q10c_no" value="false">
+  </div>
+
+  <div class="field-row cols-2">
+    <div><label>Q10d. Clearing Firm Name</label><input type="text" name="q10d_clearing_firm"></div>
+    <div><label>Years providing service</label><input type="number" name="q10d1_years" min="0"></div>
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q10d(2).</strong> Does your contract with the clearing firm hold you harmless for liability arising from their acts?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10d2_yes','q10d2_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10d2_yes','q10d2_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q10d2_yes" value="false"><input type="hidden" name="q10d2_no" value="false">
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q10d(3).</strong> Are trades cleared only on a fully disclosed basis?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10d3_yes','q10d3_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10d3_yes','q10d3_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q10d3_yes" value="false"><input type="hidden" name="q10d3_no" value="false">
+  </div>
+
+  <div class="field-group">
+    <label>Q10e. How is trading authority reviewed?</label>
+    <textarea name="q10e_trading_authority" rows="2" placeholder="Describe your process…"></textarea>
+  </div>
+
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q10f.</strong> Does the trade entry system permit overrides (manual or otherwise)?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10f_yes','q10f_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q10f_yes','q10f_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q10f_yes" value="false"><input type="hidden" name="q10f_no" value="false">
+  </div>
+
+  <div class="field-row cols-2">
+    <div><label>Who has override authority?</label><input type="text" name="q10f1_authority"></div>
+    <div><label>How often are exception reports reviewed?</label><input type="text" name="q10f3_frequency"></div>
+  </div>
+
+  <div class="field-group">
+    <label>Q10g. How frequently are trades reconciled against fund/account guidelines?</label>
+    <div class="yn-buttons" style="flex-wrap:wrap;gap:8px;">
+      <button type="button" class="yn-btn" onclick="selectReconcile(this,'daily')">Daily</button>
+      <button type="button" class="yn-btn" onclick="selectReconcile(this,'weekly')">Weekly</button>
+      <button type="button" class="yn-btn" onclick="selectReconcile(this,'monthly')">Monthly</button>
+      <button type="button" class="yn-btn" onclick="selectReconcile(this,'other')">Other</button>
+    </div>
+    <input type="hidden" name="q10g_daily" value="false">
+    <input type="hidden" name="q10g_weekly" value="false">
+    <input type="hidden" name="q10g_monthly" value="false">
+    <input type="hidden" name="q10g_other_cb" value="false">
+    <input type="text" name="q10g_other" placeholder="Specify other frequency" style="margin-top:10px;">
+  </div>
+
+  <!-- Trading errors Q11 -->
+  <div class="section-title" style="font-size:17px;margin-top:20px;">Q11. Trading Errors</div>
+  <div class="yn-group" style="margin-top:12px;">
+    <div class="yn-label">Before execution, are there procedures to ensure trades don't violate investment agreements?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11_yes','q11_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11_yes','q11_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q11_yes" value="false"><input type="hidden" name="q11_no" value="false">
+  </div>
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q11a.</strong> Are there mechanisms to quickly identify if a trading error has occurred?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11a_yes','q11a_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11a_yes','q11a_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q11a_yes" value="false"><input type="hidden" name="q11a_no" value="false">
+  </div>
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q11b.</strong> Have you ever had a trading error loss in excess of $5,000?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11b_yes','q11b_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11b_yes','q11b_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q11b_yes" value="false"><input type="hidden" name="q11b_no" value="false">
+  </div>
+  <div class="yn-group">
+    <div class="yn-label"><strong>Q11c.</strong> Do you provide ERISA 3(38) Investment Manager or ERISA 3(21) Limited Scope Fiduciary services?</div>
+    <div class="yn-buttons">
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11c_yes','q11c_no','yes')">Yes</button>
+      <button type="button" class="yn-btn" onclick="setYN(this,'q11c_yes','q11c_no','no')">No</button>
+    </div>
+    <input type="hidden" name="q11c_yes" value="false"><input type="hidden" name="q11c_no" value="false">
+  </div>
+
+  <div class="field-row cols-2" style="margin-top:4px;">
+    <div><label>ERISA 3(38) AUM ($)</label><input type="text" name="erisa_338_aum" placeholder="$0"></div>
+    <div><label>ERISA 3(38) # of Accounts</label><input type="number" name="erisa_338_accounts"></div>
+  </div>
+  <div class="field-row cols-2">
+    <div><label>ERISA 3(21) AUM ($)</label><input type="text" name="erisa_321_aum" placeholder="$0"></div>
+    <div><label>ERISA 3(21) # of Accounts</label><input type="number" name="erisa_321_accounts"></div>
+  </div>
+
+  <!-- Custodians -->
+  <div class="section-title" style="font-size:17px;margin-top:20px;">Q12. Custodians / Trade Associations</div>
+  <div class="cb-grid" style="margin-top:12px;">
+    <label class="cb-item"><input type="checkbox" name="cust_fidelity" value="true"><span class="cb-box"></span><span class="cb-label">Fidelity</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_schwab" value="true"><span class="cb-box"></span><span class="cb-label">Schwab</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_td" value="true"><span class="cb-box"></span><span class="cb-label">TD Ameritrade</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_pershing" value="true"><span class="cb-box"></span><span class="cb-label">Pershing</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_folio" value="true"><span class="cb-box"></span><span class="cb-label">Folio Institutional</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_raymond" value="true"><span class="cb-box"></span><span class="cb-label">Raymond James Advisory</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_nat_advisors" value="true"><span class="cb-box"></span><span class="cb-label">National Advisors Trust</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_trust_co" value="true"><span class="cb-box"></span><span class="cb-label">Trust Company of America</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_shareholders" value="true"><span class="cb-box"></span><span class="cb-label">Shareholders Services Group</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_scottrade" value="true"><span class="cb-box"></span><span class="cb-label">Scottrade</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_fpa" value="true"><span class="cb-box"></span><span class="cb-label">FPA</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_napfa" value="true"><span class="cb-box"></span><span class="cb-label">NAPFA</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_garrett" value="true"><span class="cb-box"></span><span class="cb-label">Garrett Network</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_fi360" value="true"><span class="cb-box"></span><span class="cb-label">Fi360</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_xypn" value="true"><span class="cb-box"></span><span class="cb-label">XYPN</span></label>
+    <label class="cb-item"><input type="checkbox" name="cust_bam" value="true"><span class="cb-box"></span><span class="cb-label">BAM</span></label>
+  </div>
+  <div class="field-group">
+    <label>Other Custodian / Association</label>
+    <input type="text" name="cust_other_text" placeholder="Enter name">
+  </div>
+
+  <!-- Q13 Advisers -->
+  <div class="section-title" style="font-size:17px;margin-top:20px;">Q13. Individual Advisers</div>
+  <p style="font-size:13px;color:var(--gray-600);margin:8px 0 16px;">Independent contractors (1099) are not automatically covered. List all advisers who provide financial advice.</p>
+  <div class="adviser-row" style="font-weight:600;font-size:12px;letter-spacing:.3px;color:var(--navy-mid);text-transform:uppercase;">
+    <span>Name</span><span>Designations</span><span>CRD #</span>
+  </div>
+  <div class="adviser-row"><input type="text" name="adviser1_name"><input type="text" name="adviser1_desig"><input type="text" name="adviser1_crd"></div>
+  <div class="adviser-row"><input type="text" name="adviser2_name"><input type="text" name="adviser2_desig"><input type="text" name="adviser2_crd"></div>
+  <div class="adviser-row"><input type="text" name="adviser3_name"><input type="text" name="adviser3_desig"><input type="text" name="adviser3_crd"></div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 4: Conflicts & Disclosures ══════════ -->
+<div class="step-panel" id="step-3">
+  <div class="section-title">Conflicts of Interest &amp; Disclosure Events</div>
+  <div class="section-sub">Questions 14–16 — please answer all questions honestly</div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(1).</strong> Does any partner/officer/employee act as both Trustee AND adviser to any customer?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a1_yes','q14a1_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a1_yes','q14a1_no','no')">No</button></div><input type="hidden" name="q14a1_yes" value="false"><input type="hidden" name="q14a1_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(2).</strong> Does any partner/officer/employee hold a position of control in any organization where customers are solicited to invest?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a2_yes','q14a2_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a2_yes','q14a2_no','no')">No</button></div><input type="hidden" name="q14a2_yes" value="false"><input type="hidden" name="q14a2_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(3).</strong> Do you advise/solicit customers to invest in any enterprise where a firm member has more than 5% ownership?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a3_yes','q14a3_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a3_yes','q14a3_no','no')">No</button></div><input type="hidden" name="q14a3_yes" value="false"><input type="hidden" name="q14a3_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(4).</strong> Do you advise customers to invest in any enterprise where another customer has more than 5% ownership?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a4_yes','q14a4_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a4_yes','q14a4_no','no')">No</button></div><input type="hidden" name="q14a4_yes" value="false"><input type="hidden" name="q14a4_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(5).</strong> Do you act as adviser to an organization where you/members have more than 5% ownership?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a5_yes','q14a5_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a5_yes','q14a5_no','no')">No</button></div><input type="hidden" name="q14a5_yes" value="false"><input type="hidden" name="q14a5_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(6).</strong> Do you currently use performance-based fees?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a6_yes','q14a6_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a6_yes','q14a6_no','no')">No</button></div><input type="hidden" name="q14a6_yes" value="false"><input type="hidden" name="q14a6_no" value="false"></div>
+
+  <div class="field-group"><label>If yes — how many customers have performance-based fees?</label><input type="number" name="q14a6b_count" min="0"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14a(7).</strong> Do you use third-party solicitors to generate business?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14a7_yes','q14a7_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14a7_yes','q14a7_no','no')">No</button></div><input type="hidden" name="q14a7_yes" value="false"><input type="hidden" name="q14a7_no" value="false"></div>
+
+  <div class="field-row cols-2">
+    <div><label>If yes — how many solicitors?</label><input type="number" name="q14a7c_count" min="0"></div>
+  </div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14b.</strong> Is any applicant a director/officer/employee in a position of control for any organization that is also an advisory customer?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14b_yes','q14b_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14b_yes','q14b_no','no')">No</button></div><input type="hidden" name="q14b_yes" value="false"><input type="hidden" name="q14b_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q14c.</strong> Are you or any partner/officer/director/employee a CPA?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q14c_yes','q14c_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q14c_yes','q14c_no','no')">No</button></div><input type="hidden" name="q14c_yes" value="false"><input type="hidden" name="q14c_no" value="false"></div>
+
+  <div class="section-title" style="font-size:17px;margin-top:28px;">Q15. Disclosure Events</div>
+  <p style="font-size:13px;color:var(--gray-600);margin:8px 0 16px;">Have you or any associated professional ever:</p>
+
+  <div class="yn-group"><div class="yn-label"><strong>15a.</strong> Had a professional license or registration denied, suspended, revoked, non-renewed, or restricted?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15a_yes','q15a_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15a_yes','q15a_no','no')">No</button></div><input type="hidden" name="q15a_yes" value="false"><input type="hidden" name="q15a_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15b.</strong> Been formally reprimanded by any court, administrative, or regulatory agency?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15b_yes','q15b_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15b_yes','q15b_no','no')">No</button></div><input type="hidden" name="q15b_yes" value="false"><input type="hidden" name="q15b_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15c.</strong> Had a complaint filed with any consumer agency, state securities dept, SEC, FINRA, or other regulatory agency?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15c_yes','q15c_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15c_yes','q15c_no','no')">No</button></div><input type="hidden" name="q15c_yes" value="false"><input type="hidden" name="q15c_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15d.</strong> Been audited by the SEC, FINRA, any state securities department, or other regulatory agency?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15d_yes','q15d_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15d_yes','q15d_no','no')">No</button></div><input type="hidden" name="q15d_yes" value="false"><input type="hidden" name="q15d_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15e.</strong> Been formally accused of violating any professional association's code of ethics?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15e_yes','q15e_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15e_yes','q15e_no','no')">No</button></div><input type="hidden" name="q15e_yes" value="false"><input type="hidden" name="q15e_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15f.</strong> Been convicted of a felony or any civil proceeding?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15f_yes','q15f_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15f_yes','q15f_no','no')">No</button></div><input type="hidden" name="q15f_yes" value="false"><input type="hidden" name="q15f_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>15g.</strong> Been involved in any fee disputes including suits?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q15g_yes','q15g_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q15g_yes','q15g_no','no')">No</button></div><input type="hidden" name="q15g_yes" value="false"><input type="hidden" name="q15g_no" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Q16.</strong> Excluding advisory fees and authorized disbursements, do you have power to withdraw or disburse funds from any customer account?</div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'q16_yes','q16_no','yes')">Yes</button><button type="button" class="yn-btn" onclick="setYN(this,'q16_yes','q16_no','no')">No</button></div><input type="hidden" name="q16_yes" value="false"><input type="hidden" name="q16_no" value="false"></div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 5: Assets & Services ══════════ -->
+<div class="step-panel" id="step-4">
+  <div class="section-title">Asset Allocation &amp; Services</div>
+  <div class="section-sub">Q17 — Enter the % of total assets in each category (must total 100%). Q18 — % of professional services.</div>
+
+  <div class="warn-box">Enter percentages only for categories that apply. Mutual Funds or ETFs holding other security types should be classified as Mutual Funds / ETFs. Leave blank if 0%.</div>
+
+  <table class="pct-table">
+    <thead><tr><th>Asset Class</th><th style="width:90px">%</th><th>Asset Class</th><th style="width:90px">%</th></tr></thead>
+    <tbody>
+      <tr><td>Mutual Funds (all styles)</td><td><input class="pct-input" type="number" name="pct_mutual_funds" min="0" max="100"></td><td>Foreign Securities (100% outside US)</td><td><input class="pct-input" type="number" name="pct_foreign_sec" min="0" max="100"></td></tr>
+      <tr><td>Cash</td><td><input class="pct-input" type="number" name="pct_cash" min="0" max="100"></td><td>Certificates of Deposit</td><td><input class="pct-input" type="number" name="pct_cd" min="0" max="100"></td></tr>
+      <tr><td>Closed-End Investment Companies</td><td><input class="pct-input" type="number" name="pct_closed_end" min="0" max="100"></td><td>Unit Investment Trusts (UIT)</td><td><input class="pct-input" type="number" name="pct_uit" min="0" max="100"></td></tr>
+      <tr><td>Variable Annuities</td><td><input class="pct-input" type="number" name="pct_variable_annuity" min="0" max="100"></td><td>Unlisted Stocks</td><td><input class="pct-input" type="number" name="pct_unlisted_stocks" min="0" max="100"></td></tr>
+      <tr><td>Investment Grade Bonds</td><td><input class="pct-input" type="number" name="pct_inv_grade_bonds" min="0" max="100"></td><td>Unregistered Securities</td><td><input class="pct-input" type="number" name="pct_unreg_sec" min="0" max="100"></td></tr>
+      <tr><td>Listed Stocks</td><td><input class="pct-input" type="number" name="pct_listed_stocks" min="0" max="100"></td><td>Index Linked Securities</td><td><input class="pct-input" type="number" name="pct_index_linked" min="0" max="100"></td></tr>
+      <tr><td>ETFs (ex. leveraged &amp; inverse)</td><td><input class="pct-input" type="number" name="pct_etf" min="0" max="100"></td><td>Junk Bonds / Below Investment Grade</td><td><input class="pct-input" type="number" name="pct_junk_bonds" min="0" max="100"></td></tr>
+      <tr><td>Leveraged ETFs</td><td><input class="pct-input" type="number" name="pct_leveraged_etf" min="0" max="100"></td><td>Promissory Notes / Leases / Receivables</td><td><input class="pct-input" type="number" name="pct_notes" min="0" max="100"></td></tr>
+      <tr><td>Inverse ETFs</td><td><input class="pct-input" type="number" name="pct_inverse_etf" min="0" max="100"></td><td>Hedge Funds</td><td><input class="pct-input" type="number" name="pct_hedge_funds" min="0" max="100"></td></tr>
+      <tr><td>Municipal Securities</td><td><input class="pct-input" type="number" name="pct_munis" min="0" max="100"></td><td>Fund of Hedge Funds</td><td><input class="pct-input" type="number" name="pct_fof" min="0" max="100"></td></tr>
+      <tr><td>Options</td><td><input class="pct-input" type="number" name="pct_options" min="0" max="100"></td><td>Guaranteed Investment Contracts (GIC)</td><td><input class="pct-input" type="number" name="pct_gic" min="0" max="100"></td></tr>
+      <tr><td>REITs (Publicly Traded)</td><td><input class="pct-input" type="number" name="pct_reits_public" min="0" max="100"></td><td>Collective Investment Trusts (CIT/CIF)</td><td><input class="pct-input" type="number" name="pct_cit" min="0" max="100"></td></tr>
+      <tr><td>REITs/REIFs (Privately Traded)</td><td><input class="pct-input" type="number" name="pct_reits_private" min="0" max="100"></td><td>Tangibles (gold, silver, collectibles, etc.)</td><td><input class="pct-input" type="number" name="pct_tangibles" min="0" max="100"></td></tr>
+      <tr><td>Limited / General Partnerships</td><td><input class="pct-input" type="number" name="pct_lp" min="0" max="100"></td><td>ABS / MBS / CMO / CDOs</td><td><input class="pct-input" type="number" name="pct_abs_mbs" min="0" max="100"></td></tr>
+      <tr><td>Exchange Traded Notes (ETN)</td><td><input class="pct-input" type="number" name="pct_etn" min="0" max="100"></td><td>Church Bonds</td><td><input class="pct-input" type="number" name="pct_church_bonds" min="0" max="100"></td></tr>
+      <tr><td>Digital Asset / Cryptocurrency</td><td><input class="pct-input" type="number" name="pct_crypto" min="0" max="100"></td><td>Non-Fungible Tokens (NFTs)</td><td><input class="pct-input" type="number" name="pct_nft" min="0" max="100"></td></tr>
+      <tr><td>Other</td><td><input class="pct-input" type="number" name="pct_other_asset" min="0" max="100"></td><td>Other Derivatives / Structured Products</td><td><input class="pct-input" type="number" name="pct_other_deriv" min="0" max="100"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="font-size:17px;margin-top:24px;">Q18. Professional Services Mix</div>
+  <p style="font-size:13px;color:var(--gray-600);margin:8px 0 16px;">Enter approximate % for each service you provide (must total 100%). LPOA = Limited Power of Attorney.</p>
+  <table class="pct-table">
+    <thead><tr><th>Service</th><th style="width:90px">%</th><th>Service</th><th style="width:90px">%</th></tr></thead>
+    <tbody>
+      <tr><td>Modular / Comprehensive Financial Planning</td><td><input class="pct-input" type="number" name="svc_financial_planning" min="0" max="100"></td><td>Investment Management / Pension Consulting</td><td><input class="pct-input" type="number" name="svc_inv_mgmt" min="0" max="100"></td></tr>
+      <tr><td>Divorce Financial Consulting</td><td><input class="pct-input" type="number" name="svc_divorce" min="0" max="100"></td><td>Hourly Advice</td><td><input class="pct-input" type="number" name="svc_hourly" min="0" max="100"></td></tr>
+      <tr><td>Discretionary Asset Management (LPOA)</td><td><input class="pct-input" type="number" name="svc_discretionary" min="0" max="100"></td><td>Wrap Accounts</td><td><input class="pct-input" type="number" name="svc_wrap" min="0" max="100"></td></tr>
+      <tr><td>Non-Discretionary Asset Management (LPOA + Prior Consent)</td><td><input class="pct-input" type="number" name="svc_non_discretionary" min="0" max="100"></td><td>Tax Preparation</td><td><input class="pct-input" type="number" name="svc_tax_prep" min="0" max="100"></td></tr>
+      <tr><td>Asset Monitoring (No LPOA)</td><td><input class="pct-input" type="number" name="svc_monitoring" min="0" max="100"></td><td>Seminars / Education</td><td><input class="pct-input" type="number" name="svc_seminars" min="0" max="100"></td></tr>
+      <tr><td>Product Sales Based on Financial Plan</td><td><input class="pct-input" type="number" name="svc_product_plan" min="0" max="100"></td><td>Third Party Pension Administration</td><td><input class="pct-input" type="number" name="svc_pension_admin" min="0" max="100"></td></tr>
+      <tr><td>Product Sales NOT Based on Financial Plan</td><td><input class="pct-input" type="number" name="svc_product_no_plan" min="0" max="100"></td><td>Timing Services</td><td><input class="pct-input" type="number" name="svc_timing" min="0" max="100"></td></tr>
+      <tr><td>Publish Newsletters for Subscription / Fee</td><td><input class="pct-input" type="number" name="svc_newsletters" min="0" max="100"></td><td>Third Party Money Managers</td><td><input class="pct-input" type="number" name="svc_third_party_mgr" min="0" max="100"></td></tr>
+      <tr><td>Other</td><td><input class="pct-input" type="number" name="svc_other" min="0" max="100"></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 6: Revenue & AUM ══════════ -->
+<div class="step-panel" id="step-5">
+  <div class="section-title">Revenue &amp; Assets Under Management</div>
+  <div class="section-sub">Q19 — Annual gross revenues. Q20 — Value of AUM/AUA.</div>
+
+  <div class="section-title" style="font-size:17px;">Q19. Sources of Revenue</div>
+  <p style="font-size:13px;color:var(--gray-600);margin:8px 0 14px;">Gross revenues from all covered individuals and entities.</p>
+  <table class="aum-table">
+    <thead><tr><th>Year</th><th>Annual Total Gross Revenue</th><th>% Fee-Only</th><th>% Commission</th><th># Advisors</th></tr></thead>
+    <tbody>
+      <tr><td>Last Year</td><td><input type="text" name="rev_last_total" placeholder="$0"></td><td><input type="number" name="rev_last_fee_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_last_comm_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_last_advisors"></td></tr>
+      <tr><td>Current Year (projected)</td><td><input type="text" name="rev_curr_total" placeholder="$0"></td><td><input type="number" name="rev_curr_fee_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_curr_comm_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_curr_advisors"></td></tr>
+      <tr><td>Next Year (projected)</td><td><input type="text" name="rev_next_total" placeholder="$0"></td><td><input type="number" name="rev_next_fee_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_next_comm_pct" placeholder="%" min="0" max="100"></td><td><input type="number" name="rev_next_advisors"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="font-size:17px;margin-top:24px;">Q20. Assets Under Management / Advisement</div>
+  <table class="aum-table">
+    <thead><tr><th>Account Type</th><th>Market Asset Value</th><th>Value of Largest Account</th><th># Customers</th></tr></thead>
+    <tbody>
+      <tr><td>Discretionary AUM</td><td><input type="text" name="aum_disc_market" placeholder="$0"></td><td><input type="text" name="aum_disc_largest" placeholder="$0"></td><td><input type="number" name="aum_disc_customers"></td></tr>
+      <tr><td>Non-Discretionary AUM</td><td><input type="text" name="aum_nondisc_market" placeholder="$0"></td><td><input type="text" name="aum_nondisc_largest" placeholder="$0"></td><td><input type="number" name="aum_nondisc_customers"></td></tr>
+      <tr><td>Asset Monitoring (No LPOA)</td><td><input type="text" name="aum_monitor_market" placeholder="$0"></td><td><input type="text" name="aum_monitor_largest" placeholder="$0"></td><td><input type="number" name="aum_monitor_customers"></td></tr>
+      <tr><td>Referral to Third Party Manager</td><td><input type="text" name="aum_referral_market" placeholder="$0"></td><td><input type="text" name="aum_referral_largest" placeholder="$0"></td><td><input type="number" name="aum_referral_customers"></td></tr>
+    </tbody>
+  </table>
+  <div class="field-row cols-2">
+    <div><label>Total AUM + AUA ($)</label><input type="text" name="aum_total" placeholder="$0"></div>
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 7: Coverage Request ══════════ -->
+<div class="step-panel" id="step-6">
+  <div class="section-title">Requested Coverage</div>
+  <div class="section-sub">Q21 — Select your desired limit and deductible. Markel does not guarantee any specific limit or deductible.</div>
+
+  <div class="section-title" style="font-size:17px;">Policy Limit (per occurrence / aggregate)</div>
+  <div class="limit-grid" style="margin-top:12px;">
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="100_200" onchange="selectLimit(this)">$100K / $200K</label>
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="250_500" onchange="selectLimit(this)">$250K / $500K</label>
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="500_1000" onchange="selectLimit(this)">$500K / $1M</label>
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="1m_1m" onchange="selectLimit(this)">$1M / $1M</label>
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="1m_2m" onchange="selectLimit(this)">$1M / $2M</label>
+    <label class="limit-opt"><input type="radio" name="limit_selection" value="2m_2m" onchange="selectLimit(this)">$2M / $2M</label>
+  </div>
+  <div class="field-row cols-2" style="margin-top:8px;">
+    <div><label>Other Limit (specify)</label><input type="text" name="limit_other" placeholder="e.g. $3,000,000 / $3,000,000"></div>
+  </div>
+
+  <div class="section-title" style="font-size:17px;margin-top:24px;">Deductible</div>
+  <div class="limit-grid" style="margin-top:12px;">
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="1000" onchange="selectDed(this)">$1,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="2500" onchange="selectDed(this)">$2,500</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="5000" onchange="selectDed(this)">$5,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="10000" onchange="selectDed(this)">$10,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="15000" onchange="selectDed(this)">$15,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="20000" onchange="selectDed(this)">$20,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="25000" onchange="selectDed(this)">$25,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="50000" onchange="selectDed(this)">$50,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="75000" onchange="selectDed(this)">$75,000</label>
+    <label class="limit-opt"><input type="radio" name="ded_selection" value="100000" onchange="selectDed(this)">$100,000</label>
+  </div>
+
+  <!-- Hidden inputs for limit/ded checkboxes -->
+  <input type="hidden" name="limit_100_200" value="false"><input type="hidden" name="limit_250_500" value="false">
+  <input type="hidden" name="limit_500_1000" value="false"><input type="hidden" name="limit_1m_1m" value="false">
+  <input type="hidden" name="limit_1m_2m" value="false"><input type="hidden" name="limit_2m_2m" value="false">
+  <input type="hidden" name="ded_1000" value="false"><input type="hidden" name="ded_2500" value="false">
+  <input type="hidden" name="ded_5000" value="false"><input type="hidden" name="ded_10000" value="false">
+  <input type="hidden" name="ded_15000" value="false"><input type="hidden" name="ded_20000" value="false">
+  <input type="hidden" name="ded_25000" value="false"><input type="hidden" name="ded_50000" value="false">
+  <input type="hidden" name="ded_75000" value="false"><input type="hidden" name="ded_100000" value="false">
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 8: Supplemental ══════════ -->
+<div class="step-panel" id="step-7">
+  <div class="section-title">Section B — Supplemental Coverages</div>
+  <div class="section-sub">Indicate whether you want to request or decline each optional coverage.</div>
+
+  <p style="font-size:13.5px;color:var(--gray-800);margin-bottom:18px;">For each supplemental coverage below, select <strong>Request</strong> or <strong>Decline</strong>:</p>
+
+  <div class="yn-group"><div class="yn-label"><strong>Tax Preparation Coverage</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_tax_request','secb_tax_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_tax_request','secb_tax_decline','no')">Decline</button></div><input type="hidden" name="secb_tax_request" value="false"><input type="hidden" name="secb_tax_decline" value="false"></div>
+  <div id="tax-detail" style="display:none;margin-bottom:16px;">
+    <label>Gross annual tax preparation revenue ($)</label>
+    <input type="text" name="b1_tax_revenue" placeholder="$0">
+  </div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Independent Contractors Coverage</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_ic_request','secb_ic_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_ic_request','secb_ic_decline','no')">Decline</button></div><input type="hidden" name="secb_ic_request" value="false"><input type="hidden" name="secb_ic_decline" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Product Sales Coverage</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_prod_request','secb_prod_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_prod_request','secb_prod_decline','no')">Decline</button></div><input type="hidden" name="secb_prod_request" value="false"><input type="hidden" name="secb_prod_decline" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Directors &amp; Officers Liability</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_do_request','secb_do_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_do_request','secb_do_decline','no')">Decline</button></div><input type="hidden" name="secb_do_request" value="false"><input type="hidden" name="secb_do_decline" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Employment Practices Liability</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_epl_request','secb_epl_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_epl_request','secb_epl_decline','no')">Decline</button></div><input type="hidden" name="secb_epl_request" value="false"><input type="hidden" name="secb_epl_decline" value="false"></div>
+
+  <div class="yn-group"><div class="yn-label"><strong>Specified Professions Professional Liability</strong></div><div class="yn-buttons"><button type="button" class="yn-btn" onclick="setYN(this,'secb_spec_request','secb_spec_decline','yes')">Request</button><button type="button" class="yn-btn" onclick="setYN(this,'secb_spec_request','secb_spec_decline','no')">Decline</button></div><input type="hidden" name="secb_spec_request" value="false"><input type="hidden" name="secb_spec_decline" value="false"></div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 9: Signature ══════════ -->
+<div class="step-panel" id="step-8">
+  <div class="section-title">Certification &amp; Signature</div>
+  <div class="section-sub">Please review and sign the application.</div>
+
+  <div class="info-box" style="background:#fff8e8;border-color:#e8c97a;color:#5a4200;">
+    <strong>Notice — Claims-Made Coverage</strong>
+    This application is for coverage on a claims-made and reported basis. Such coverage, if issued, will apply solely as stated in the policy and will potentially cover only those claims that are first made against you and reported to us during the policy period or extended reporting period, if applicable.<br><br>
+    By submitting, you declare that: (1) all statements are true and accurate; (2) you are not aware of any undisclosed fact that may result in a claim; (3) you understand the claims-made nature of the proposed policy.
+  </div>
+
+  <div class="field-row cols-2">
+    <div><label>Name of Applicant</label><input type="text" name="sig_name" required></div>
+    <div><label>Title</label><input type="text" name="sig_title"></div>
+  </div>
+  <div class="field-row cols-2">
+    <div><label>Date</label><input type="date" name="sig_date" required></div>
+    <div><label>Florida Agent License # <span class="opt">(FL only)</span></label><input type="text" name="fl_agent_license"></div>
+  </div>
+
+  <div class="info-box" style="margin-top:20px;">
+    <strong>What happens next?</strong>
+    Clicking Submit sends your completed Markel application to your broker at Upward Risk Management. They will review it and send you a quote within 1–2 business days. No coverage is bound until you receive a written quote and confirm.
+  </div>
+
+  <div id="form-error" class="error-msg">Something went wrong submitting your application. Please try again or call us directly.</div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-submit" id="submit-btn" onclick="submitForm()">
+      Submit Application ✓
+    </button>
+  </div>
+</div>
+
+</form>
+</div><!-- /form-body -->
+
+<script>
+// ── Config ──────────────────────────────────────────────────────
+// IMPORTANT: Replace this with your deployed backend URL after deploying
+const BACKEND_URL = "https://ria-eo-backend.onrender.com/submit";
+
+// ── Step Management ──────────────────────────────────────────────
+let currentStep = 0;
+const totalSteps = 9;
+
+function nextStep() {
+  if (currentStep < totalSteps - 1) {
+    setStep(currentStep + 1);
+  }
+}
+function prevStep() {
+  if (currentStep > 0) {
+    setStep(currentStep - 1);
+  }
+}
+function setStep(n) {
+  document.getElementById(`step-${currentStep}`).classList.remove('active');
+  document.querySelectorAll('.step-tab')[currentStep].classList.remove('active');
+  document.querySelectorAll('.step-tab')[currentStep].classList.add('done');
+  currentStep = n;
+  document.getElementById(`step-${currentStep}`).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i === currentStep);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Yes/No Buttons ────────────────────────────────────────────────
+function setYN(btn, yesField, noField, val) {
+  const group = btn.closest('.yn-group');
+  group.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('selected-yes','selected-no'));
+  if (val === 'yes') {
+    btn.classList.add('selected-yes');
+    document.querySelector(`[name="${yesField}"]`).value = 'true';
+    document.querySelector(`[name="${noField}"]`).value = 'false';
+  } else {
+    btn.classList.add('selected-no');
+    document.querySelector(`[name="${yesField}"]`).value = 'false';
+    document.querySelector(`[name="${noField}"]`).value = 'true';
+  }
+}
+
+// ── Reconcile Frequency ───────────────────────────────────────────
+function selectReconcile(btn, val) {
+  const container = btn.closest('.field-group');
+  container.querySelectorAll('.yn-btn').forEach(b => b.classList.remove('selected-yes'));
+  btn.classList.add('selected-yes');
+  ['daily','weekly','monthly','other'].forEach(v => {
+    document.querySelector(`[name="q10g_${v === 'other' ? 'other_cb' : v}"]`).value = (v === val) ? 'true' : 'false';
+  });
+}
+
+// ── Limit & Deductible Pickers ────────────────────────────────────
+const LIMIT_FIELDS = ['limit_100_200','limit_250_500','limit_500_1000','limit_1m_1m','limit_1m_2m','limit_2m_2m'];
+const DED_FIELDS   = ['ded_1000','ded_2500','ded_5000','ded_10000','ded_15000','ded_20000','ded_25000','ded_50000','ded_75000','ded_100000'];
+
+function selectLimit(radio) {
+  document.querySelectorAll('[name="limit_selection"]').forEach(r => {
+    r.closest('.limit-opt').classList.remove('selected');
+  });
+  radio.closest('.limit-opt').classList.add('selected');
+  LIMIT_FIELDS.forEach(f => {
+    document.querySelector(`[name="${f}"]`).value = (f === `limit_${radio.value}`) ? 'true' : 'false';
+  });
+}
+function selectDed(radio) {
+  document.querySelectorAll('[name="ded_selection"]').forEach(r => {
+    r.closest('.limit-opt').classList.remove('selected');
+  });
+  radio.closest('.limit-opt').classList.add('selected');
+  DED_FIELDS.forEach(f => {
+    document.querySelector(`[name="${f}"]`).value = (f === `ded_${radio.value}`) ? 'true' : 'false';
+  });
+}
+
+// ── Form Collection ───────────────────────────────────────────────
+function collectFormData() {
+  const form = document.getElementById('ria-form');
+  const data = {};
+  const elements = form.elements;
+  for (let el of elements) {
+    if (!el.name) continue;
+    if (el.type === 'radio') continue; // handled by hidden inputs
+    if (el.type === 'checkbox') {
+      data[el.name] = el.checked ? 'true' : 'false';
+    } else {
+      data[el.name] = el.value;
+    }
+  }
+  return data;
+}
+
+// ── Submit ────────────────────────────────────────────────────────
+async function submitForm() {
+  const btn = document.getElementById('submit-btn');
+  const errEl = document.getElementById('form-error');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  errEl.style.display = 'none';
+
+  const data = collectFormData();
+  try {
+    const resp = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await resp.json();
+    if (resp.ok && (result.status === 'success' || result.status === 'dev_mode')) {
+      document.getElementById('ria-form').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
+  } catch (e) {
+    errEl.textContent = `Error: ${e.message}. Please try again or call us.`;
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Application ✓';
+  }
+}
+</script>
+</body>
+</html>
