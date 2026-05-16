@@ -7,22 +7,22 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #0d1f3c;
-    --navy-mid: #1a3360;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --cream: #faf8f4;
+    --navy: #111111;
+    --navy-mid: #2a2a2a;
+    --gold: #ffffff;
+    --gold-light: #e0e0e0;
+    --cream: #f5f5f5;
     --white: #ffffff;
-    --gray-100: #f5f4f1;
-    --gray-200: #e8e6e1;
-    --gray-400: #9e9b95;
-    --gray-600: #5c5a56;
-    --gray-800: #2c2b29;
-    --red: #c0392b;
+    --gray-100: #f2f2f2;
+    --gray-200: #e0e0e0;
+    --gray-400: #9e9e9e;
+    --gray-600: #555555;
+    --gray-800: #1a1a1a;
+    --red: #cc2200;
     --green: #1a7a4a;
-    --radius: 10px;
-    --shadow: 0 4px 24px rgba(13,31,60,0.10);
-    --shadow-lg: 0 12px 48px rgba(13,31,60,0.16);
+    --radius: 6px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.10);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.18);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,6 +43,7 @@
     padding: 36px 40px 32px;
     position: relative;
     overflow: hidden;
+    border-bottom: 1px solid #2a2a2a;
   }
   .form-header::before {
     content: '';
@@ -50,7 +51,7 @@
     top: -60px; right: -60px;
     width: 240px; height: 240px;
     border-radius: 50%;
-    background: rgba(201,168,76,0.12);
+    background: rgba(255,255,255,0.03);
   }
   .form-header::after {
     content: '';
@@ -58,7 +59,7 @@
     bottom: -40px; left: 20%;
     width: 160px; height: 160px;
     border-radius: 50%;
-    background: rgba(201,168,76,0.07);
+    background: rgba(255,255,255,0.02);
   }
   .header-inner { position: relative; z-index: 1; }
   .header-badge {
@@ -70,13 +71,13 @@
     letter-spacing: 1.5px;
     text-transform: uppercase;
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 3px;
     margin-bottom: 14px;
   }
   .form-header h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 28px;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 1.25;
     margin-bottom: 8px;
   }
@@ -88,8 +89,9 @@
 
   /* ── Progress Bar ────────────────────────────────── */
   .progress-wrap {
-    background: var(--navy-mid);
+    background: #1a1a1a;
     padding: 0 40px;
+    border-bottom: 1px solid #333;
   }
   .progress-steps {
     display: flex;
@@ -140,8 +142,9 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
   .section-title {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 22px;
+    font-weight: 300;
     color: var(--navy);
     margin-bottom: 6px;
   }
@@ -172,7 +175,7 @@
     display: block;
     font-size: 12.5px;
     font-weight: 600;
-    color: var(--navy-mid);
+    color: #1a1a1a;
     letter-spacing: 0.3px;
     margin-bottom: 6px;
     text-transform: uppercase;
@@ -199,7 +202,7 @@
     outline: none;
   }
   input:focus, textarea:focus, select:focus {
-    border-color: var(--navy-mid);
+    border-color: #1a1a1a;
     box-shadow: 0 0 0 3px rgba(26,51,96,0.08);
   }
   textarea { resize: vertical; min-height: 80px; }
@@ -227,7 +230,7 @@
     transition: all 0.15s;
     color: var(--gray-600);
   }
-  .yn-btn:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .yn-btn:hover { border-color: #1a1a1a; color: var(--navy); }
   .yn-btn.selected-yes { background: var(--navy); border-color: var(--navy); color: white; }
   .yn-btn.selected-no  { background: var(--gray-100); border-color: var(--gray-400); color: var(--gray-800); }
   .yn-btn[data-val="no"].selected-no { background: #fff3f3; border-color: #e0a0a0; color: var(--red); }
@@ -250,7 +253,7 @@
     transition: all 0.15s;
     user-select: none;
   }
-  .cb-item:hover { border-color: var(--navy-mid); background: #f0f3f8; }
+  .cb-item:hover { border-color: #1a1a1a; background: #f0f0f0; }
   .cb-item input[type="checkbox"] { display: none; }
   .cb-item .cb-box {
     width: 17px; height: 17px;
@@ -301,7 +304,7 @@
     text-align: right;
     font-family: 'DM Sans', sans-serif;
   }
-  .pct-input:focus { border-color: var(--navy-mid); outline: none; }
+  .pct-input:focus { border-color: #1a1a1a; outline: none; }
 
   /* ── AUM Table ───────────────────────────────────── */
   .aum-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; }
@@ -315,7 +318,7 @@
   }
   .aum-table td { padding: 8px 10px; border-bottom: 1px solid var(--gray-200); }
   .aum-table tr:nth-child(even) td { background: var(--gray-100); }
-  .aum-table td:first-child { font-weight: 500; color: var(--navy-mid); font-size: 12.5px; }
+  .aum-table td:first-child { font-weight: 500; color: #1a1a1a; font-size: 12.5px; }
   .aum-table input { width: 100%; }
 
   /* ── Limit Picker ────────────────────────────────── */
@@ -332,7 +335,7 @@
     color: var(--gray-600);
     background: white;
   }
-  .limit-opt:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .limit-opt:hover { border-color: #1a1a1a; color: var(--navy); }
   .limit-opt.selected { border-color: var(--navy); background: var(--navy); color: white; }
   .limit-opt input { display: none; }
 
@@ -341,24 +344,24 @@
 
   /* ── Info Box ────────────────────────────────────── */
   .info-box {
-    background: #eef3ff;
-    border: 1px solid #b8c9f0;
+    background: #f5f5f5;
+    border: 1px solid #d0d0d0;
     border-radius: 9px;
     padding: 14px 18px;
     font-size: 13px;
-    color: var(--navy-mid);
+    color: #1a1a1a;
     margin-bottom: 20px;
     line-height: 1.6;
   }
   .info-box strong { display: block; margin-bottom: 4px; font-size: 13.5px; }
 
   .warn-box {
-    background: #fff8e8;
-    border: 1px solid #e8c97a;
+    background: #f5f5f5;
+    border: 1px solid #d0d0d0;
     border-radius: 9px;
     padding: 14px 18px;
     font-size: 13px;
-    color: #6b4f00;
+    color: #333333;
     margin-bottom: 20px;
   }
 
@@ -394,10 +397,11 @@
     color: var(--gray-600);
     border: 1.5px solid var(--gray-200);
   }
-  .btn-secondary:hover { border-color: var(--navy-mid); color: var(--navy); }
+  .btn-secondary:hover { border-color: #1a1a1a; color: var(--navy); }
   .btn-submit {
-    background: var(--gold);
-    color: var(--navy);
+    background: #111111;
+    color: #ffffff;
+    border: 1.5px solid #111111;
   }
   .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: var(--shadow); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
@@ -418,8 +422,9 @@
     color: white;
   }
   #success-screen h2 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 26px;
+    font-weight: 300;
     color: var(--navy);
     margin-bottom: 12px;
   }
@@ -1067,7 +1072,7 @@
   <div class="section-title">Certification &amp; Signature</div>
   <div class="section-sub">Please review and sign the application.</div>
 
-  <div class="info-box" style="background:#fff8e8;border-color:#e8c97a;color:#5a4200;">
+  <div class="info-box" style="background:#f5f5f5;border-color:#d0d0d0;color:#333333;">
     <strong>Notice — Claims-Made Coverage</strong>
     This application is for coverage on a claims-made and reported basis. Such coverage, if issued, will apply solely as stated in the policy and will potentially cover only those claims that are first made against you and reported to us during the policy period or extended reporting period, if applicable.<br><br>
     By submitting, you declare that: (1) all statements are true and accurate; (2) you are not aware of any undisclosed fact that may result in a claim; (3) you understand the claims-made nature of the proposed policy.
