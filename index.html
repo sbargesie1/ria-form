@@ -457,6 +457,7 @@
     .limit-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@1/web/file-uploader.min.js" type="module"></script>
 </head>
 <body>
 
@@ -481,6 +482,7 @@
     <div class="step-tab" data-step="6"><span class="num">7</span>Coverage Request</div>
     <div class="step-tab" data-step="7"><span class="num">8</span>Supplemental</div>
     <div class="step-tab" data-step="8"><span class="num">9</span>Signature</div>
+    <div class="step-tab" data-step="9"><span class="num">10</span>Documents</div>
   </div>
 </div>
 
@@ -1096,6 +1098,59 @@
 
   <div class="nav-row">
     <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════ STEP 10: Document Upload ══════════ -->
+<div class="step-panel" id="step-9">
+  <div class="section-title">Supporting Documents</div>
+  <div class="section-sub">Optional — upload your supporting documents securely. All files are encrypted in transit and at rest.</div>
+
+  <div class="info-box">
+    <strong>Document Submission</strong>
+    To complete your application, Markel typically requires the following documents. You may upload them here now, or submit them separately at your convenience — simply email them to <strong>info@upwardriskmanagement.com</strong> and reference your firm name. Your application will be processed once all materials are received.
+  </div>
+
+  <div class="field-group" style="margin-bottom:24px;">
+    <label style="margin-bottom:12px;">Accepted Documents</label>
+    <div class="cb-grid" style="margin-bottom:16px;pointer-events:none;opacity:0.7;">
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Form ADV Part 1 &amp; 2A</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Form ADV Part 2B Supplements</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Current Balance Sheet</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Income Statement</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Sample Customer Contracts</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Regulatory Audit Letter</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Investment Philosophy</span></div>
+      <div class="cb-item"><span class="cb-box"></span><span class="cb-label">Trading Policy &amp; Procedures</span></div>
+    </div>
+  </div>
+
+  <div class="field-group">
+    <label>Upload Files <span class="opt">optional — PDFs, Word docs, Excel files accepted</span></label>
+    <div style="margin-top:10px;">
+      <uc-config
+        ctx-name="ria-docs"
+        pubkey="ad3919781d85849912db"
+        multiple="true"
+        accept=".pdf,.doc,.docx,.xls,.xlsx"
+        max-files="20"
+      ></uc-config>
+      <uc-file-uploader-regular
+        ctx-name="ria-docs"
+        style="--uc-primary-color:#111111; --uc-border-radius:6px;"
+      ></uc-file-uploader-regular>
+    </div>
+    <p style="font-size:12px;color:var(--gray-400);margin-top:10px;">Files are encrypted with AES-256 and stored securely. Maximum 20 files, 500MB each.</p>
+  </div>
+
+  <div class="info-box" style="margin-top:8px;">
+    <strong>Prefer to email?</strong>
+    Send documents to <strong>info@upwardriskmanagement.com</strong> with your firm name in the subject line. We will match them to your application automatically.
+  </div>
+
+  <div class="nav-row">
+    <button type="button" class="btn btn-secondary" onclick="prevStep()">← Back</button>
     <button type="button" class="btn btn-submit" id="submit-btn" onclick="submitForm()">
       Submit Application ✓
     </button>
@@ -1112,7 +1167,7 @@ const BACKEND_URL = "https://ria-eo-backend-1.onrender.com/submit";
 
 // ── Step Management ──────────────────────────────────────────────
 let currentStep = 0;
-const totalSteps = 9;
+const totalSteps = 10;
 
 function nextStep() {
   if (currentStep < totalSteps - 1) {
